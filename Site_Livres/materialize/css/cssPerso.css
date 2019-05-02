@@ -1,0 +1,83 @@
+.material-icons {
+    color: black;
+}
+
+
+
+body {
+
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+
+   margin: 0;
+   padding: 0;
+   background-image: url("../../background.jpg");
+   background-position: center;
+    /*background-repeat: no-repeat;*/
+   background-size: cover;
+   height: 100%;
+   width: 100%;
+   -webkit-background-size: cover;
+
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+a{
+    color: black;
+}
+
+/**
+Lorsque l'on passe sa souris sur une étoile
+ */
+.fa:hover {
+    color: #ffc107;
+}
+
+/**
+lors que on passe la souris sur une icone mateialize
+ */
+.material-icons:hover{
+    color: #00695c   ;
+    cursor: pointer;
+}
+
+
+
+.indexContent{
+
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0, 0.4);
+
+}
+
+div#livre {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    -ms-align-items: center;
+    display: -webkit-flex;
+    display: -ms-flex;
+}
+
+
+.background{
+    /*background-color: white;*/
+    background-color: rgba(255,255,255,0.6);
+    height: 200%;
+    width: 47%;
+}
+
+
+.backgroundIndex{
+    /*background-color: white;*/
+    background-color: rgba(255,255,255,0.4);
+}
+
+.tess{
+
+
+}
