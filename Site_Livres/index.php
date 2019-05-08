@@ -2,7 +2,6 @@
 <main>
     <?php
     session_start();
-
     //Appel de la classs pour le PDO
     include "php/connexionPDO.php";
     //Récupère les infos sur les livres dans BD
@@ -13,13 +12,9 @@
                    FROM t_evaluation 
                    INNER JOIN t_book ON t_evaluation.idBook = t_book.idBook 
                    ORDER BY idEvaluation DESC';
-
     $top5 = new connexionPDO();
-
     $getdata = $top5->executeQuerySelect($requete);
     $showAverage = $top5->executeQuerySelect($getAverage);
-
-
     //Permet de vérifier si l'utilisateur est connecté
     if(isset($_SESSION['Pseudo'])) {
         $pseudo = $_SESSION['Pseudo'];
@@ -28,7 +23,6 @@
                   WHERE usePseudo = '$pseudo'";
         $getuserID = $top5->executeQuerySelect($getIdUser);
         //Récupère l'id de l'utilsateur connecté en fonction de son nom
-
         $idOfUser = $getuserID[0]['idUser'];
         if ($getuserID[0]['useAdminOrNot'] == 1) {
             $userRole = "Admin";
@@ -75,14 +69,18 @@
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
-    <main>
     <body>
+        <main>
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+        <script src="materialize/js/init.js"></script>
         <!--navbar-->
         <nav id="menu-haut">
-            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-
             <div class="nav-wrapper #00695c teal darken-3">
-
+                <a href="#" data-activates="mobile-demo" class="button-collapse">
+                    <i class="material-icons">menu</i>
+                </a>
                 <!--Menu en mode normal-->
                 <ul class="left hide-on-med-and-down">
                     <li><i class="material-icons"><a href="index.php">class</a></i></li>
@@ -92,8 +90,8 @@
                     //Si l'utilisateur n'est pas connecté il ne peut pas aller ajouter un livre ou l'évaluer
                     if(isset($_SESSION['Pseudo'])) {
                         if ($userRole == "Admin") {
-                        echo "<li><a href='Pages/AddBook.php?type=add&id=0'>Ajouter un ouvrage</a></li>";
-                        }echo "<li><a href=\"Pages/evals.php\">Evaluer</a></li>";
+                            echo "<li><a href='Pages/AddBook.php?type=add&id=0'>Ajouter un ouvrage</a></li>";
+                        }echo "<li><a href='Pages/evals.php'>Evaluer</a></li>";
                     }
                     ?>
                 </ul>
@@ -104,7 +102,6 @@
                     {
                         //afiche le nom d'utilisateur
                         echo "<li><a class='waves-effect waves-light modal-trigger' href='#user1'>$_SESSION[Pseudo]</a></li>";
-
                         echo "<li><a href='php/disconnection.php' class='waves-effect waves-light btn red'>Déconnexion</a></li>";
                     }
                     else
@@ -115,13 +112,13 @@
                     ?>
                 </ul>
                 <!--Menu en mode mobile-->
-                <ul id="nav-mobile" class="side-nav">
+                <ul id="mobile-demo" class="side-nav">
                     <li><i class="material-icons"><a href="index.php">class</a></i></li>
                     <li><a href="Pages/ShowBook.php">Ouvrage</a></li>
                     <?php
                     if(isset($_SESSION['Pseudo'])) {
                         echo "<li><a href='Pages/AddBook.php?type=add&id=0'>Ajouter un ouvrage</a></li>";
-                        echo "<li><a href=\"../Pages/evals.php\">Evaluer</a></li>";
+                        echo "<li><a href='Pages/evals.php'>Evaluer</a></li>";
                     }
                     ?>
                     <!--</ul>
@@ -137,25 +134,24 @@
                         echo "<li><a href='Pages/loginPage.php' class='waves-effect waves-light btn'>Connexion</a></li>";
                         echo "<li><a href='Pages/registration.php' class='waves-effect waves-light btn'>Inscription</a></li>";
                     }
-                    ?>                </ul>
+                    ?>
+                </ul>
             </div>
-
         </nav>
         <!-- Affiche les caractèristique de l'utilisateur -->
-            <div id="bg-text">
+        <div id="bg-text">
             <!--Site description-->
             <div class="row">
-                <div class="col s2 m3"></div>
-                <div class="backgroundIndex col s2 m6">
-                    <!--Carte contenant la présentation du site-->
+                <div class="col s12 m3"></div>
+                <div class="col s12 m6">
                     <div class="card blue-grey darken-1">
                         <div class="card-content white-text">
                             <span class="card-title">Accueil</span>
                             <p>Ce site Web a pour but de lister différents livres. Vous pouvez y retrouver toute leurs spécification ainsi que l'avis des lecteurs
-                                Si vous désirez donner votre avis sur une oeuvre vous pouvez vous inscrir ou vous connecter et ensuite donnez une note entre 1 et 5 à ce livre.
-                            </p>
+                                Si vous désirez donner votre avis sur une oeuvre vous pouvez vous inscrir ou vous connecter et ensuite donnez une note entre 1 et 5 à ce livre.</p>
                         </div>
                     </div>
+
                     <!--Tableau avec les 5 derniers livres ajouter-->
                     <table class="">
                         <thead>
@@ -166,34 +162,37 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            //Affiche le titre du livre et le résumé
-                            foreach($getdata as $line)
+                        <?php
+                        //Affiche le titre du livre et le résumé
+                        foreach($getdata as $line)
+                        {
+                            echo "<tr>"."<td>"." ".$line["booTitle"]." "."</td>";
+                            echo "<td><p align='justify'>"." ".$line["booAbstract"]." "."</p></td>";
+                            //Affiche la moyenne des notes
+                            $i= 0;
+                            foreach($showAverage as $allAverage)
                             {
-                                echo "<tr>"."<td>"." ".$line["booTitle"]." "."</td>";
-                                echo "<td><p align='justify'>"." ".$line["booAbstract"]." "."</p></td>";
-
-                                //Affiche la moyenne des notes
-                                $i= 0;
-                                foreach($showAverage as $allAverage)
-                                {
-                                    //Affiche la bonne moyenne au bon livre
-                                    if($line["idBook"] == $allAverage["idBook"] and $i == 0){
-                                        echo "<td>"." ".$allAverage["averageNotes"].""."/5</td>"."</tr>";
-                                        $i++;
-                                    }//end if
-                                }//end foreach
-                            }//foreach 2
-                            ?>
+                                //Affiche la bonne moyenne au bon livre
+                                if($line["idBook"] == $allAverage["idBook"] and $i == 0){
+                                    echo "<td>"." ".$allAverage["averageNotes"].""."/5</td>"."</tr>";
+                                    $i++;
+                                }//end if
+                            }//end foreach
+                        }//foreach 2
+                        ?>
                         </tbody>
                     </table>
                 </div><!--fin div col s2 m6-->
             </div><!--fin div row-->
         </div>
-    </body>
+        </body>
     </main>
     <!--Footer-->
     <?php
     include 'php/footer.php'
     ?>
-</html>
+    </html>
+
+
+
+

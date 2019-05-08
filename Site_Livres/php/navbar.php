@@ -20,6 +20,7 @@
                 }
                 echo "<li><a href='evals.php'>Evaluer</a></li>";
             }
+            echo "<li><a href='EvalGrafic.php'>Graphique</a></li>";
             ?>
             </ul>
             <ul class="right hide-on-med-and-down">
